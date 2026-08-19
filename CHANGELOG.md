@@ -12,4 +12,4 @@ All notable changes to the LUCID package are recorded here. This project has not
 
 - README: the npm package name `lucid-reader` is described as planned, not yet published, rather than stated as available.
 - Adopted dual licensing to match the corpus: the standard document (`LUCID - the standard.md`) under the Creative Commons Attribution 4.0 International License (`LICENSE-SPEC`), and the code under the Apache License 2.0 (`LICENSE`). The `package.json` license is now `Apache-2.0 AND CC-BY-4.0`.
-- `schema.json` `$id` now points at the `Polymathie-xyz/lucid` repository.
+- `schema.json` `$id` now points at the `Polymathie-Studio/lucid` repository.

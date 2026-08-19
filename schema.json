@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://github.com/Polymathie-xyz/lucid/schema.json",
+  "$id": "https://github.com/Polymathie-Studio/lucid/schema.json",
   "title": "LUCID concept dictionary",
   "description": "The data contract a site fills in. A dictionary maps a term, lowercased, to a concept met at up to three depths. A site defines each concept once here and every marked term reads the same entry, so a term means the same thing wherever it appears.",
   "type": "object",
