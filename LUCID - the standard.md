@@ -1,6 +1,6 @@
 # LUCID: the standard
 
-*Version 0.6.0. LUCID, Layered Understanding, Calibrated In Disclosure. The standard it implements, and how it grounds in Dimensional Frame Language.*
+*Version 0.7.0. LUCID, Layered Understanding, Calibrated In Disclosure. The standard it implements, and how it grounds in Dimensional Frame Language.*
 
 ## What it is
 
@@ -73,9 +73,17 @@ The depth axis places a mark's complexity on demand, and the flow places an expe
 
 The sixth principle is why the hierarchy set composes with a reader-tuned palette rather than fighting it. Where the palette is reader-tuned and floored for legibility, as TEMPER's is, a hierarchy that rode on color alone would break under the reader's own settings. Carried on the non-color devices first, with color supporting through the tokens, the order holds through every mode and every reader.
 
+## Off the happy path
+
+A surface has a happy path, where the data is present and the request succeeds, and it has the rest: the moment before the data arrives, the case where there is none, and the failure. These are not edge cases; a real surface spends much of its life in them, and they are where honest disclosure is tested, because each is a condition the reader must be told plainly rather than left to guess. Placing complexity honestly includes disclosing the surface's condition, not only its content.
+
+Four conditions, each with a plain disclosure. Pending: while content loads, disclose that it is coming and shape the disclosure like what will arrive, a skeleton of the content rather than a bare spinner, so the reader knows what to expect and the layout does not jump when it lands. Absent: when there is nothing to show, say why there is nothing and what the reader can do about it, with the one next step made easy; an empty state is a disclosure, not a blank, and "no data" discloses nothing. Failed: when something fails, disclose it in plain language, never a raw code or a silent swallow, and give a way back, whether retry, undo, or where to turn; a form that submits must disclose success or failure, because swallowing the error is the false floor the standard forbids. Unreachable: when the connection is lost or a route does not exist, say so plainly and point somewhere real; a 404 is the not-found condition disclosed.
+
+The standard governs what is disclosed, the condition made plain and navigable. It does not govern the mechanism that catches the failure or retries the request, which is framework-specific and belongs to the host, the same separation the standard already draws for the flow's state and a visual's data. The reusable components that render these states are their own primitive, governed by this principle.
+
 ## Specialist grammars
 
-The depth axis, the flow, and the hierarchy set are general: they hold for any surface. But some surfaces belong to a kind that carries conventions of its own, hard-won and specific, that a general standard cannot supply. A pipeline is not a dashboard is not a form. So the standard carries a registry of specialist grammars, one per interface archetype, each a named set of conventions that applies only where a surface is of that kind.
+The depth axis, the flow, the hierarchy set, and the states off the happy path are general: they hold for any surface. But some surfaces belong to a kind that carries conventions of its own, hard-won and specific, that a general standard cannot supply. A pipeline is not a dashboard is not a form. So the standard carries a registry of specialist grammars, one per interface archetype, each a named set of conventions that applies only where a surface is of that kind.
 
 A well-formed grammar does three things. It layers on the general sets and never contradicts them. Where it can, it specializes the standard's own principles into its domain rather than importing foreign ones, which is the test of coherence: a dashboard's summary-context-detail is the three depths, a conversational interface's cite-the-claim-and-open-the-reasoning is drill to source, a form's steps are the flow. And a grammar lives in this registry, not in any one product, so every consumer inherits the same one rather than reinventing it.
 
@@ -106,6 +114,7 @@ Each entry is a seed, filled as a consumer needs it. Candidate archetypes not ye
 9. Place in time, not only in space. A page is placed at the depth the reader chooses; an experience is placed in the order the reader is ready for, calibrated to how far along they are, with everything still reachable. The mark is the atom, the flow is the whole.
 10. Order at rest, not only on demand. Before anything opens, the surface is arranged so what leads leads and a layer the rest reads from contains it rather than sitting beside it, the hierarchy carried on the non-color devices so it holds in any palette.
 11. Inherit grammars, do not reinvent them. A kind of surface carries conventions of its own; those live in one registry, and a product inherits the general sets plus a declared combination of grammars and stays thin.
+12. Disclose the condition, not only the content. A surface's pending, absent, failed, and unreachable states are each disclosed plainly, with a way forward; the happy path is not the whole surface.
 
 ## The four spheres
 
@@ -166,4 +175,5 @@ LUCID is a sibling to TEMPER and HASP as a reusable module: TEMPER tunes the pal
 
 ## Changelog
 
+- 0.7.0: Added the Off the happy path general set, the pending, absent, failed, and unreachable states disclosed as conditions, with a new principle (disclose the condition, not only the content) and the states named among the general sets. The reusable components that render these states are a separate primitive, governed by this principle.
 - 0.6.0: Added the Why it exists section, stating the reason the family exists. These are primitives for websites, dashboards, and tools increasingly built by an agent, each protecting one posture fast building tends to drop: TEMPER legibility, LUCID honest disclosure, HASP privacy.
