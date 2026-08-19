@@ -92,6 +92,10 @@ node verify.mjs path/to/registry.json
 
 The mark is keyboard-reachable, toggles on Enter and Space, and shows a focus ring. The panel closes on Escape and on an outside click. The gloss is always available as a native tooltip, so depth one needs no interaction at all.
 
+## Part of the Polymathie family
+
+LUCID is one of the [Polymathie](https://github.com/Polymathie-Studio) primitives: small, dependency-free pieces for building websites, dashboards, and tools, where each protects one posture that fast, AI-assisted building tends to drop. Its siblings are [TEMPER](https://github.com/Polymathie-Studio/temper) (legibility and design tokens) and [HASP](https://github.com/Polymathie-Studio/hasp) (bring-your-own-key privacy), with more of the invisible-correctness layer in progress. Adopt one and the others compose with it.
+
 ## License
 
 The standard document (`LUCID - the standard.md`) is licensed under the Creative Commons Attribution 4.0 International License; see `LICENSE-SPEC`. The code and other software artifacts are licensed under the Apache License 2.0; see `LICENSE` and `NOTICE`.
