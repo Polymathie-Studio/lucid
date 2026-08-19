@@ -1,0 +1,51 @@
+{
+  "name": "lucid-reader",
+  "version": "0.3.0",
+  "description": "Reader-sovereign progressive disclosure. Mark a term once; open it at three depths, gloss to explainer to detail, with the deepest rung a reachable path to the source, plus relations and an optional host-rendered visual, and the judgment left to the reader. Framework-agnostic core plus a React binding.",
+  "license": "Apache-2.0 AND CC-BY-4.0",
+  "author": "Regis Lloyd Chapman",
+  "type": "module",
+  "main": "lucid.js",
+  "exports": {
+    ".": "./lucid.js",
+    "./lucid.css": "./lucid.css",
+    "./schema.json": "./schema.json",
+    "./react": {
+      "types": "./react/index.d.ts",
+      "default": "./react/index.js"
+    }
+  },
+  "files": [
+    "lucid.js",
+    "lucid.css",
+    "schema.json",
+    "react/",
+    "LUCID - the standard.md",
+    "README.md",
+    "NOTICE",
+    "LICENSE-SPEC"
+  ],
+  "sideEffects": [
+    "./lucid.js",
+    "*.css"
+  ],
+  "peerDependencies": {
+    "react": ">=18"
+  },
+  "peerDependenciesMeta": {
+    "react": {
+      "optional": true
+    }
+  },
+  "keywords": [
+    "progressive-disclosure",
+    "disclosure",
+    "details-on-demand",
+    "glossary",
+    "provenance",
+    "drill-to-source",
+    "three-reader",
+    "accessibility",
+    "documentation"
+  ]
+}

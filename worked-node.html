@@ -1,0 +1,397 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LUCID worked node: one concept, rendered several ways from one structure</title>
+<style>
+  :root {
+    --bg: #f6f7f9;
+    --panel: #ffffff;
+    --ink: #1a1d21;
+    --ink-soft: #565d66;
+    --ink-faint: #8b929b;
+    --line: #e3e6ea;
+    --line-soft: #eef0f3;
+    --accent: #2f6f7e;
+    --accent-soft: #e4eef0;
+    --good: #2e7d5b;
+    --warn: #b06a1a;
+    --wrong: #a23b4e;
+    --code-bg: #0f1417;
+    --code-ink: #d6dde2;
+    --radius: 12px;
+    --mono: ui-monospace, "SF Mono", "JetBrains Mono", Menlo, Consolas, monospace;
+    --sans: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #101417;
+      --panel: #171c20;
+      --ink: #e8ebee;
+      --ink-soft: #a7afb7;
+      --ink-faint: #6f7883;
+      --line: #262d33;
+      --line-soft: #1e242a;
+      --accent: #6fb3c2;
+      --accent-soft: #16333a;
+      --good: #6bbf95;
+      --warn: #d69a5a;
+      --wrong: #d98499;
+      --code-bg: #0b0f12;
+      --code-ink: #cdd5da;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #101417; --panel: #171c20; --ink: #e8ebee; --ink-soft: #a7afb7; --ink-faint: #6f7883;
+    --line: #262d33; --line-soft: #1e242a; --accent: #6fb3c2; --accent-soft: #16333a;
+    --good: #6bbf95; --warn: #d69a5a; --wrong: #d98499; --code-bg: #0b0f12; --code-ink: #cdd5da;
+  }
+  :root[data-theme="light"] {
+    --bg: #f6f7f9; --panel: #ffffff; --ink: #1a1d21; --ink-soft: #565d66; --ink-faint: #8b929b;
+    --line: #e3e6ea; --line-soft: #eef0f3; --accent: #2f6f7e; --accent-soft: #e4eef0;
+    --good: #2e7d5b; --warn: #b06a1a; --wrong: #a23b4e; --code-bg: #0f1417; --code-ink: #d6dde2;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--ink);
+    font-family: var(--sans); line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 1180px; margin: 0 auto; padding: 2.4rem 1.4rem 4rem; }
+  header.page { margin-bottom: 2rem; }
+  .eyebrow { font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent); font-weight: 600; }
+  h1.page { font-size: clamp(1.4rem, 2.6vw, 2rem); line-height: 1.2; margin: 0.5rem 0 0.6rem; letter-spacing: -0.01em; text-wrap: balance; }
+  p.lede { max-width: 62ch; color: var(--ink-soft); margin: 0; font-size: 1.02rem; }
+  .themebtn { position: absolute; top: 1rem; right: 1rem; border: 1px solid var(--line); background: var(--panel); color: var(--ink-soft); border-radius: 20px; padding: 0.35rem 0.8rem; font: inherit; font-size: 0.78rem; cursor: pointer; }
+
+  .grid { display: grid; grid-template-columns: 1fr; gap: 1.4rem; }
+  @media (min-width: 900px) { .grid { grid-template-columns: 1.05fr 0.95fr; align-items: start; } }
+
+  .col-label { font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-faint); font-weight: 600; margin: 0 0 0.7rem; }
+
+  /* Reader side */
+  .reader { }
+  .term-line { font-size: 1.05rem; color: var(--ink-soft); margin-bottom: 0.9rem; }
+  .lucid-mark {
+    color: var(--ink); font-weight: 600; border-bottom: 2px solid var(--accent);
+    padding-bottom: 1px; cursor: help;
+  }
+  .panel { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; }
+  .panel > section { padding: 1rem 1.1rem; border-top: 1px solid var(--line-soft); }
+  .panel > section:first-child { border-top: none; }
+  .facet { font-size: 0.68rem; letter-spacing: 0.09em; text-transform: uppercase; color: var(--ink-faint); font-weight: 600; }
+  .facet b { color: var(--accent); font-weight: 600; }
+
+  /* Depth spine */
+  .depth-tabs { display: flex; gap: 0.4rem; margin: 0.55rem 0 0.75rem; flex-wrap: wrap; }
+  .depth-tabs button {
+    border: 1px solid var(--line); background: transparent; color: var(--ink-soft);
+    border-radius: 20px; padding: 0.28rem 0.75rem; font: inherit; font-size: 0.82rem; cursor: pointer;
+  }
+  .depth-tabs button[aria-selected="true"] { background: var(--accent); border-color: var(--accent); color: #fff; }
+  :root[data-theme="dark"] .depth-tabs button[aria-selected="true"],
+  @media (prefers-color-scheme: dark) { }
+  .depth-body { font-size: 0.98rem; }
+  .depth-body .whole { font-size: 0.72rem; color: var(--ink-faint); margin-top: 0.5rem; font-style: italic; }
+
+  /* Visual */
+  .viz-head { display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; flex-wrap: wrap; margin-bottom: 0.2rem; }
+  .toggle { display: inline-flex; border: 1px solid var(--line); border-radius: 20px; overflow: hidden; }
+  .toggle button { border: none; background: transparent; color: var(--ink-soft); font: inherit; font-size: 0.76rem; padding: 0.24rem 0.7rem; cursor: pointer; }
+  .toggle button[aria-selected="true"] { background: var(--accent-soft); color: var(--accent); font-weight: 600; }
+  .chart { width: 100%; }
+  .chart-note { font-size: 0.76rem; color: var(--ink-faint); margin-top: 0.35rem; }
+  .bar-label { font-size: 11px; fill: var(--ink-soft); }
+  .bar-val { font-size: 11px; fill: var(--ink-soft); font-variant-numeric: tabular-nums; }
+
+  /* Relations */
+  .rels { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 0.5rem; }
+  .rel { font-size: 0.78rem; border: 1px solid var(--line); border-radius: 16px; padding: 0.2rem 0.6rem; color: var(--ink-soft); }
+  .rel span { color: var(--ink-faint); font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.06em; margin-right: 0.35rem; }
+
+  .src a { color: var(--accent); }
+  .src { font-size: 0.9rem; color: var(--ink-soft); }
+
+  /* Node side */
+  pre.node {
+    background: var(--code-bg); color: var(--code-ink); border-radius: var(--radius);
+    padding: 1rem 1.05rem; overflow-x: auto; font-family: var(--mono); font-size: 0.775rem; line-height: 1.5;
+    margin: 0; border: 1px solid var(--line);
+  }
+  pre.node .k { color: #7fbfd0; }
+  pre.node .s { color: #b7d99a; }
+  pre.node .c { color: #6b7680; font-style: italic; }
+  pre.node .lucid { color: #e0a86b; }
+  .node-cap { font-size: 0.78rem; color: var(--ink-faint); margin: 0.85rem 0 0.4rem; }
+  .instance-box { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); padding: 0.85rem 1rem; margin-top: 0.7rem; font-family: var(--mono); font-size: 0.76rem; color: var(--ink-soft); overflow-x: auto; }
+  .instance-box b { color: var(--accent); font-family: var(--sans); }
+
+  footer.note { margin-top: 2.4rem; padding-top: 1.4rem; border-top: 1px solid var(--line); color: var(--ink-soft); font-size: 0.88rem; max-width: 74ch; }
+  footer.note h2 { font-size: 0.95rem; margin: 0 0 0.6rem; color: var(--ink); }
+  footer.note p { margin: 0 0 0.7rem; }
+  footer.note code { font-family: var(--mono); font-size: 0.82em; background: var(--line-soft); padding: 0.05rem 0.3rem; border-radius: 4px; }
+</style>
+</head>
+<body>
+<button class="themebtn" id="themebtn">theme</button>
+<div class="wrap">
+  <header class="page">
+    <div class="eyebrow">LUCID &middot; representability proof</div>
+    <h1 class="page">One concept, rendered several ways from one structure</h1>
+    <p class="lede">The left is what a reader meets. The right is the single node it all comes from. Text depths, a data-bound visual, relations, and a source are all one JSON node, with instance data supplied at the edge. Toggle the dataset and watch the visual re-bind while the node stays fixed.</p>
+  </header>
+
+  <div class="grid">
+    <!-- READER SIDE -->
+    <div class="reader">
+      <div class="col-label">As the reader meets it</div>
+      <div class="term-line">Public goods can be funded through <span class="lucid-mark" id="mark">Quadratic Funding</span>, which changes who decides.</div>
+
+      <div class="panel">
+        <!-- DEPTH: the spine -->
+        <section>
+          <div class="facet">Depth is the spine &middot; the amount shown, one axis across every modality</div>
+          <div class="depth-tabs" role="tablist" id="depthTabs"></div>
+          <div class="depth-body" id="depthBody"></div>
+        </section>
+
+        <!-- VISUAL: declarative spec bound to deferred instance data -->
+        <section>
+          <div class="viz-head">
+            <div class="facet">Reads as &middot; a visual, the same node's <b>operational</b> facet</div>
+            <div class="toggle" role="tablist" id="dataToggle"></div>
+          </div>
+          <svg class="chart" id="chart" viewBox="0 0 520 200" role="img" aria-label="Matched funding by project"></svg>
+          <div class="chart-note" id="chartNote"></div>
+        </section>
+
+        <!-- RELATIONS: their own pass, distinct from depth -->
+        <section>
+          <div class="facet">Relations &middot; between distinct concepts, <b>not</b> the depth axis</div>
+          <div class="rels" id="rels"></div>
+        </section>
+
+        <!-- SOURCE -->
+        <section>
+          <div class="facet">Drill to source &middot; reachable at every depth</div>
+          <p class="src" id="src"></p>
+        </section>
+      </div>
+    </div>
+
+    <!-- NODE SIDE -->
+    <div class="nodeside">
+      <div class="col-label">The one node it comes from</div>
+      <pre class="node" id="nodeJson"></pre>
+      <div class="node-cap">Instance data, supplied by the host at render, never inside the node:</div>
+      <div class="instance-box" id="instanceBox"></div>
+    </div>
+  </div>
+
+  <footer class="note">
+    <h2>What this proves, and what it does not</h2>
+    <p>One JSON node carries all of it: SKOS relations for the ontology, an ordered <code>lucid:depth</code> list that is a separate axis from those relations, a <code>lucid:source</code> pointer, and an optional <code>lucid:visual</code> as a declarative Vega-Lite-shaped spec whose data is a named, deferred source. The dataset toggle swaps the instance data the host injects while the node itself does not change, which is the type versus instance boundary holding in practice. Where a claim carries its own qualifications, what it rests on and what would break it, those sit as ordinary content in the depth tiers, in both directions, not as a rung the standard weighs.</p>
+    <p>One honest limit. The chart here is drawn by a small inline interpreter of the spec so the page stays self-contained with no dependency; in production the same spec is handed to the real Vega-Lite runtime, so this is one model over two renderers, not one engine.</p>
+  </footer>
+</div>
+
+<script>
+// ---- THE ONE NODE (authored once, in the unified schema) ---------------------
+const concept = {
+  "@context": { "skos": "http://www.w3.org/2004/02/skos/core#", "lucid": "https://lucid-reader.dev/ns#" },
+  "@id": "urn:lucid:concept:quadratic-funding",
+  "@type": "skos:Concept",
+  "skos:prefLabel": "Quadratic Funding",
+  "skos:broader":  [ "urn:lucid:concept:matching-mechanisms" ],
+  "skos:narrower": [ "urn:lucid:concept:capital-constrained-qf" ],
+  "skos:related":  [ "urn:lucid:concept:sybil-resistance", "urn:lucid:concept:collusion" ],
+  "lucid:depth": [
+    { "level": "gloss",     "format": "text",
+      "body": "A way to fund public goods where the breadth of support decides the money, not its size. Many small contributions are matched far more than a few large ones." },
+    { "level": "explainer", "format": "text",
+      "body": "Each project's match grows with the square of the sum of the square roots of its contributions, so two projects that raise the same total get very different matches: the one backed by more distinct people wins. You run it as a round with a shared matching pool that is split by this rule." },
+    { "level": "detail",    "format": "text",
+      "body": "Match for a project is proportional to (sum over contributors of the square root of the contribution) squared, minus the sum of the contributions, then scaled to the pool. Under honest, independent contributions this allocation is the one that a group of self-interested people would choose if they could costlessly cooperate, which is the sense in which it is optimal. That optimality holds only while contributions stay honest and independent, so Sybil identities, one actor split into many, or collusion among contributors, will undo it. Both what the claim rests on and what breaks it sit here as ordinary content." }
+  ],
+  "lucid:source": [
+    { "citation": "Buterin, Hitzig, Weyl, A Flexible Design for Funding Public Goods (2019)", "url": "https://arxiv.org/abs/1809.06421" }
+  ],
+  "lucid:visual": {
+    "engine": "vega-lite",
+    "spec": {
+      "data": { "name": "lucid:instance" },
+      "mark": "bar",
+      "encoding": {
+        "x": { "field": "project", "type": "nominal" },
+        "y": { "field": "matched", "type": "quantitative" }
+      }
+    },
+    "dataContract": {
+      "dataset": "lucid:instance",
+      "requiredFields": [
+        { "field": "project",      "type": "nominal" },
+        { "field": "raised",       "type": "quantitative" },
+        { "field": "contributors", "type": "quantitative" },
+        { "field": "matched",      "type": "quantitative" }
+      ]
+    }
+  }
+};
+
+// ---- THE HOST / APP (supplies instance data; runs its own QF engine) ---------
+// The dictionary never holds these numbers. The app computes matched from raw
+// contributions, honoring the concept's dataContract, and injects them at render.
+const POOL = 50000;
+function qfRound(projects) {
+  const raw = projects.map(p => {
+    const sumRoots = p.contributions.reduce((a, c) => a + Math.sqrt(c), 0);
+    const raised = p.contributions.reduce((a, c) => a + c, 0);
+    return { project: p.project, raised, contributors: p.contributions.length,
+             points: Math.max(0, sumRoots * sumRoots - raised) };
+  });
+  const totalPoints = raw.reduce((a, r) => a + r.points, 0) || 1;
+  return raw.map(r => ({
+    project: r.project, raised: Math.round(r.raised), contributors: r.contributors,
+    matched: Math.round((r.points / totalPoints) * POOL)
+  }));
+}
+const rounds = {
+  A: qfRound([
+    { project: "Grassroots", contributions: Array(150).fill(7) },
+    { project: "Whale-backed", contributions: [260, 260, 260, 270] }
+  ]),
+  B: qfRound([
+    { project: "Grassroots", contributions: Array(60).fill(9) },
+    { project: "Mid", contributions: Array(12).fill(45) },
+    { project: "Whale-backed", contributions: [280, 260] }
+  ])
+};
+
+// ---- THE ENGINE (one orchestrator, renders each slot from the node) ----------
+let depthIndex = 0, roundKey = "A";
+
+function renderDepth() {
+  const tabs = document.getElementById("depthTabs");
+  tabs.innerHTML = "";
+  concept["lucid:depth"].forEach((tier, i) => {
+    const b = document.createElement("button");
+    b.textContent = tier.level;
+    b.setAttribute("role", "tab");
+    b.setAttribute("aria-selected", i === depthIndex ? "true" : "false");
+    b.onclick = () => { depthIndex = i; renderDepth(); };
+    tabs.appendChild(b);
+  });
+  const tier = concept["lucid:depth"][depthIndex];
+  document.getElementById("depthBody").innerHTML =
+    "<div>" + tier.body + "</div>" +
+    "<div class='whole'>Each depth is a whole read at its own precision, not a lesser version of the one below (constitutive containment).</div>";
+}
+
+function renderRelations() {
+  const label = { "skos:broader": "broader", "skos:narrower": "narrower", "skos:related": "related" };
+  const el = document.getElementById("rels");
+  el.innerHTML = "";
+  ["skos:broader", "skos:narrower", "skos:related"].forEach(rel => {
+    (concept[rel] || []).forEach(id => {
+      const name = id.split(":").pop().replace(/-/g, " ");
+      const chip = document.createElement("span");
+      chip.className = "rel";
+      chip.innerHTML = "<span>" + label[rel] + "</span>" + name;
+      el.appendChild(chip);
+    });
+  });
+}
+
+function renderSource() {
+  const s = concept["lucid:source"][0];
+  document.getElementById("src").innerHTML = "<a href='" + s.url + "' target='_blank' rel='noreferrer'>" + s.citation + "</a>";
+}
+
+// A minimal interpreter of the Vega-Lite-shaped spec: read mark + encoding, bind
+// the injected instance rows, draw. Production hands the same spec to Vega-Lite.
+function renderVisual() {
+  const rows = rounds[roundKey];
+  const spec = concept["lucid:visual"].spec;
+  const xField = spec.encoding.x.field, yField = spec.encoding.y.field;
+  const svg = document.getElementById("chart");
+  const W = 520, H = 200, padL = 8, padR = 8, padT = 12, padB = 34;
+  const plotW = W - padL - padR, plotH = H - padT - padB;
+  const maxY = Math.max(...rows.map(r => r[yField])) || 1;
+  const n = rows.length;
+  const slot = plotW / n, bw = Math.min(90, slot * 0.6);
+  let out = "";
+  // gridline at pool-ish top
+  rows.forEach((r, i) => {
+    const h = (r[yField] / maxY) * plotH;
+    const x = padL + i * slot + (slot - bw) / 2;
+    const y = padT + (plotH - h);
+    out += "<rect x='" + x.toFixed(1) + "' y='" + y.toFixed(1) + "' width='" + bw.toFixed(1) +
+           "' height='" + h.toFixed(1) + "' rx='3' fill='var(--accent)'></rect>";
+    out += "<text class='bar-val' x='" + (x + bw / 2).toFixed(1) + "' y='" + (y - 5).toFixed(1) +
+           "' text-anchor='middle'>$" + r[yField].toLocaleString() + "</text>";
+    out += "<text class='bar-label' x='" + (x + bw / 2).toFixed(1) + "' y='" + (padT + plotH + 15).toFixed(1) +
+           "' text-anchor='middle'>" + r[xField] + "</text>";
+    out += "<text class='bar-label' x='" + (x + bw / 2).toFixed(1) + "' y='" + (padT + plotH + 28).toFixed(1) +
+           "' text-anchor='middle' style='fill:var(--ink-faint)'>$" + r.raised.toLocaleString() + " from " + r.contributors + "</text>";
+  });
+  svg.innerHTML = out;
+  document.getElementById("chartNote").textContent =
+    "Bar height is matched funding (y = matched). Raised and contributor count are shown under each. Same money raised, very different match: breadth decides.";
+  renderInstanceBox();
+}
+
+function renderInstanceBox() {
+  const rows = rounds[roundKey];
+  const box = document.getElementById("instanceBox");
+  box.innerHTML = "<b>lucid:instance</b> (round " + roundKey + ")<br>" +
+    rows.map(r => "{ project: \"" + r.project + "\", raised: " + r.raised +
+      ", contributors: " + r.contributors + ", matched: " + r.matched + " }").join("<br>");
+}
+
+function renderToggle() {
+  const t = document.getElementById("dataToggle");
+  t.innerHTML = "";
+  Object.keys(rounds).forEach(k => {
+    const b = document.createElement("button");
+    b.textContent = "dataset " + k;
+    b.setAttribute("role", "tab");
+    b.setAttribute("aria-selected", k === roundKey ? "true" : "false");
+    b.onclick = () => { roundKey = k; renderToggle(); renderVisual(); };
+    t.appendChild(b);
+  });
+}
+
+// Pretty-print the node with light syntax coloring.
+function renderNodeJson() {
+  const json = JSON.stringify(concept, null, 2);
+  const html = json
+    .replace(/&/g, "&amp;").replace(/</g, "&lt;")
+    .replace(/"(lucid:[^"]+)":/g, '"<span class="lucid">$1</span>":')
+    .replace(/"(@?[a-z:]+)":/gi, function (m, k) {
+      return k.indexOf("lucid:") === 0 ? m : '"<span class="k">' + k + '</span>":';
+    })
+    .replace(/: (&quot;|")([^"]*)("|&quot;)/g, ': <span class="s">"$2"</span>');
+  document.getElementById("nodeJson").innerHTML = html;
+}
+
+// Theme toggle
+document.getElementById("themebtn").onclick = function () {
+  const root = document.documentElement;
+  const cur = root.getAttribute("data-theme");
+  const next = cur === "dark" ? "light" : cur === "light" ? "dark"
+    : (window.matchMedia("(prefers-color-scheme: dark)").matches ? "light" : "dark");
+  root.setAttribute("data-theme", next);
+  renderVisual();
+};
+
+renderDepth();
+renderRelations();
+renderSource();
+renderToggle();
+renderVisual();
+renderNodeJson();
+</script>
+</body>
+</html>

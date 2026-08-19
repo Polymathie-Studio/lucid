@@ -1,0 +1,590 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LUCID: the shipped core rendering the unified model</title>
+<style>
+/*
+ * LUCID: styles for the mark and the three-depth panel.
+ *
+ * Written against TEMPER's semantic tokens (var(--color-...)) with a plain
+ * fallback for each, so it is theme-aware for free where TEMPER is present and
+ * still works standalone where it is not. Both the framework-agnostic core
+ * (lucid.js) and the React binding read these classes, so the two surfaces look
+ * the same. No build step.
+ */
+
+.lucid-mark {
+  border-bottom: 1px dotted var(--color-text-secondary, #6b7280);
+  border-radius: 1px;
+  cursor: help;
+  color: inherit;
+  text-decoration: none;
+}
+
+.lucid-mark[data-lucid-deeper] {
+  cursor: pointer;
+  border-bottom-color: var(--color-accent, #6366f1);
+}
+
+.lucid-mark[data-lucid-deeper]:hover {
+  border-bottom-color: var(--color-text-primary, #111827);
+}
+
+.lucid-mark:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--color-accent, #6366f1);
+  border-radius: 2px;
+}
+
+.lucid-pop {
+  position: absolute;
+  left: 0;
+  top: 100%;
+  z-index: 50;
+  margin-top: 0.35rem;
+  width: 20rem;
+  max-width: 85vw;
+  text-align: left;
+  padding: 0.75rem;
+  border-radius: 0.6rem;
+  border: 1px solid var(--color-border, #d4d4d8);
+  background: var(--color-surface, var(--color-bg-elevated, var(--color-bg-base, #ffffff)));
+  color: var(--color-text-primary, #1f2937);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
+  font-size: 0.875rem;
+  line-height: 1.5;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.lucid-pop__gloss {
+  display: block;
+  color: var(--color-text-primary, #1f2937);
+}
+
+.lucid-pop__domain {
+  display: block;
+  margin-top: 0.25rem;
+  font-size: 0.75rem;
+  color: var(--color-text-secondary, #6b7280);
+}
+
+.lucid-pop__explainer {
+  display: block;
+  margin-top: 0.5rem;
+  padding-top: 0.5rem;
+  border-top: 1px solid var(--color-border, #e5e7eb);
+  color: var(--color-text-primary, #374151);
+}
+
+.lucid-pop__detail {
+  display: block;
+  margin-top: 0.5rem;
+  color: var(--color-text-primary, #374151);
+}
+
+.lucid-pop__visual {
+  display: block;
+  margin-top: 0.6rem;
+}
+
+.lucid-pop__rels {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin-top: 0.6rem;
+}
+
+.lucid-pop__rel {
+  font: inherit;
+  font-size: 0.72rem;
+  border: 1px solid var(--color-border, #d4d4d8);
+  border-radius: 16px;
+  padding: 0.15rem 0.55rem;
+  background: none;
+  color: var(--color-text-primary, #374151);
+  cursor: default;
+}
+
+button.lucid-pop__rel {
+  cursor: pointer;
+}
+
+button.lucid-pop__rel:hover {
+  border-color: var(--color-accent, #6366f1);
+}
+
+.lucid-pop__rel-kind {
+  color: var(--color-text-secondary, #6b7280);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-size: 0.62rem;
+}
+
+.lucid-pop__more {
+  margin-top: 0.5rem;
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  color: var(--color-text-secondary, #6b7280);
+}
+
+.lucid-pop__more:hover {
+  color: var(--color-text-primary, #111827);
+}
+
+.lucid-pop__evidence {
+  display: block;
+  margin-top: 0.5rem;
+  padding-top: 0.5rem;
+  border-top: 1px solid var(--color-border, #e5e7eb);
+}
+
+.lucid-pop__label {
+  display: block;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.lucid-pop__label--support {
+  color: var(--color-success, var(--color-positive, #059669));
+}
+
+.lucid-pop__group + .lucid-pop__group {
+  margin-top: 0.5rem;
+}
+
+.lucid-pop__item {
+  display: block;
+  margin-top: 0.25rem;
+  font-size: 0.75rem;
+  line-height: 1.5;
+  color: var(--color-text-primary, #374151);
+}
+
+.lucid-pop__item a {
+  color: inherit;
+  text-decoration: underline;
+}
+
+.lucid-pop__note {
+  color: var(--color-text-secondary, #6b7280);
+}
+
+.lucid-pop__sovereign {
+  display: block;
+  margin-top: 0.5rem;
+  font-size: 0.6875rem;
+  font-style: italic;
+  color: var(--color-text-secondary, #6b7280);
+}
+
+.lucid-pop:focus {
+  outline: none;
+}
+
+/* Flipped placement when the panel would run off the viewport edge. */
+.lucid-pop--right {
+  left: auto;
+  right: 0;
+}
+
+.lucid-pop--above {
+  top: auto;
+  bottom: 100%;
+  margin-top: 0;
+  margin-bottom: 0.35rem;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .lucid-pop {
+    animation: lucid-pop-in 120ms ease-out;
+  }
+  @keyframes lucid-pop-in {
+    from { opacity: 0; transform: translateY(-2px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+}
+
+
+  :root{--bg:#f6f7f9;--panel:#fff;--ink:#1a1d21;--ink-soft:#565d66;--line:#e3e6ea;--accent:#2f6f7e;
+    --color-bg-elevated:#fff;--color-bg-base:#fff;--color-border:#e3e6ea;--color-text-primary:#1a1d21;
+    --color-text-secondary:#565d66;--color-accent:#2f6f7e;--color-positive:#2e7d5b;}
+  @media (prefers-color-scheme:dark){:root{--bg:#101417;--panel:#171c20;--ink:#e8ebee;--ink-soft:#a7afb7;--line:#262d33;--accent:#6fb3c2;
+    --color-bg-elevated:#171c20;--color-bg-base:#171c20;--color-border:#262d33;--color-text-primary:#e8ebee;
+    --color-text-secondary:#a7afb7;--color-accent:#6fb3c2;--color-positive:#6bbf95;}}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;line-height:1.6}
+  .wrap{max-width:44rem;margin:0 auto;padding:2.6rem 1.4rem 5rem}
+  .eyebrow{font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);font-weight:600}
+  h1{font-size:1.6rem;margin:.5rem 0 .5rem;letter-spacing:-.01em}
+  .lede{color:var(--ink-soft);max-width:60ch}
+  p.body{font-size:1.05rem;margin:1.6rem 0}
+  .hint{font-size:.85rem;color:var(--ink-soft);border-top:1px solid var(--line);padding-top:1.2rem;margin-top:2.4rem}
+  code{font-family:ui-monospace,Menlo,monospace;font-size:.85em;background:var(--line);padding:.05rem .3rem;border-radius:4px}
+
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="eyebrow">LUCID &middot; the shipped core, inlined</div>
+  <h1>One concept model, rendered by the module itself</h1>
+  <p class="lede">This page inlines the actual vanilla core (<code>lucid.js</code>) and its stylesheet, unchanged, then registers a small dictionary. Everything you see is the shipped binding, not a bespoke renderer. Hover a marked term for its gloss, click to open the explainer, detail, visual, and relations, then Open the source.</p>
+
+  <p class="body">The first thing a founder names is their <lucid-term data-jump="operating shape">operating shape</lucid-term>, because it decides what counts as evidence. Under it sits the <lucid-term data-jump="demand signal" term="demand signal">demand signal</lucid-term>, which a make-a-market venture reads the opposite way an incumbent does, and which carries a small visual drawn by a host-supplied renderer. A term with no deeper layers, like <lucid-term data-jump="runway">runway</lucid-term>, still glosses on hover but does not open.</p>
+
+  <p class="hint">The relation chips are clickable (the host wired <code>onSelect</code> to scroll to the related term). The bar chart proves the type versus instance split: the dictionary holds only the spec, and the page supplied the numbers through <code>getData</code>. Swap the tiny inline renderer for Vega-Lite and nothing else changes.</p>
+</div>
+
+<script type="module">
+/*
+ * LUCID: reader-sovereign progressive disclosure. The framework-agnostic core.
+ *
+ * Mark a term once. Hover gives the gloss, opening gives the explainer and detail,
+ * and the source is one reach further: the basis the claim rests on, with the
+ * judgment left to the reader. A reader goes further into one concept, never climbs
+ * to a rank above another.
+ *
+ * Zero dependencies, one ES module, no build step.
+ *
+ *   import { registerConcepts } from 'lucid-reader'
+ *   registerConcepts({ 'operating shape': { gloss: '...', explainer: '...' } })
+ *   // markup:  <lucid-term>operating shape</lucid-term>
+ *   //     or:  <lucid-term term="operating shape">shape</lucid-term>
+ *
+ * Or with no JavaScript config, declare the dictionary inline:
+ *   <script type="application/json" data-lucid-registry>{ "term": { "gloss": "..." } }<\/script>
+ */
+
+const REGISTRY = {}
+const pending = new Set()
+
+// Host-supplied hooks, kept out of the module so it stays zero-dependency: the
+// host brings the visualization runtime and the instance data, and can handle a
+// reader selecting a related concept.
+const CONFIG = { renderVisual: null, getData: null, onSelect: null }
+
+export function configure(opts) {
+  if (!opts) return
+  if ('renderVisual' in opts) CONFIG.renderVisual = opts.renderVisual
+  if ('getData' in opts) CONFIG.getData = opts.getData
+  if ('onSelect' in opts) CONFIG.onSelect = opts.onSelect
+}
+
+export function registerConcepts(dict) {
+  if (!dict) return
+  for (const key of Object.keys(dict)) REGISTRY[key.toLowerCase()] = dict[key]
+  // Wire any marks that connected before their concept was registered.
+  for (const node of Array.from(pending)) node.setup()
+}
+
+export function getConcept(term) {
+  return term ? REGISTRY[String(term).toLowerCase()] : undefined
+}
+
+function humanizeId(id) {
+  return String(id).split(':').pop().replace(/[-_]/g, ' ')
+}
+
+function hasRelations(c) {
+  const r = c.relations
+  return Boolean(r && ((r.broader && r.broader.length) || (r.narrower && r.narrower.length) || (r.related && r.related.length)))
+}
+
+function loadDeclaredRegistry() {
+  if (typeof document === 'undefined') return
+  const node = document.querySelector('script[type="application/json"][data-lucid-registry]')
+  if (!node) return
+  try {
+    registerConcepts(JSON.parse(node.textContent || '{}'))
+  } catch (e) {
+    /* a malformed dictionary should not take the page down */
+  }
+}
+
+function make(tag, className, text) {
+  const node = document.createElement(tag)
+  if (className) node.className = className
+  if (text != null) node.textContent = text
+  return node
+}
+
+class LucidTerm extends HTMLElement {
+  connectedCallback() {
+    this.setup()
+  }
+
+  setup() {
+    if (this._concept) return // already wired
+
+    const term = this.getAttribute('term') || this.textContent
+    const c = getConcept(term)
+    if (!c) {
+      pending.add(this) // no entry yet: wait for its registration
+      return
+    }
+
+    pending.delete(this)
+    this._concept = c
+    this.classList.add('lucid-mark')
+    this.style.position = 'relative'
+    this.title = c.domain ? `${c.gloss}\n\n${c.domain}` : c.gloss
+
+    const hasVisual = Boolean(c.visual && CONFIG.renderVisual)
+    const deeper = Boolean(c.explainer || c.detail || hasVisual || hasRelations(c) || (c.sources && c.sources.length))
+    if (!deeper) return
+
+    this.setAttribute('data-lucid-deeper', '')
+    this.setAttribute('role', 'button')
+    this.setAttribute('tabindex', '0')
+    this.setAttribute('aria-expanded', 'false')
+    this.addEventListener('click', (e) => {
+      // Ignore clicks that land inside the open panel (explainer text, links,
+      // the evidence button), so only the mark itself toggles.
+      if (this._pop && this._pop.contains(e.target)) return
+      this.toggle()
+    })
+    this.addEventListener('keydown', (e) => {
+      if (this._pop && this._pop.contains(e.target)) return
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault()
+        this.toggle()
+      }
+    })
+  }
+
+  toggle() {
+    if (this._open) this.close()
+    else this.open()
+  }
+
+  open() {
+    if (this._open) return
+    this._open = true
+    this.setAttribute('aria-expanded', 'true')
+
+    const c = this._concept
+    const pop = make('span', 'lucid-pop')
+    pop.setAttribute('role', 'dialog')
+    pop.appendChild(make('span', 'lucid-pop__gloss', c.gloss))
+    if (c.domain) pop.appendChild(make('span', 'lucid-pop__domain', c.domain))
+    if (c.explainer) pop.appendChild(make('span', 'lucid-pop__explainer', c.explainer))
+    if (c.detail) pop.appendChild(make('span', 'lucid-pop__detail', c.detail))
+
+    // The visual, rendered by the host-supplied renderer. The module stays
+    // zero-dependency: it hands over the spec and the host-supplied data.
+    if (c.visual && CONFIG.renderVisual) {
+      const holder = make('span', 'lucid-pop__visual')
+      const data = CONFIG.getData ? CONFIG.getData(this.getAttribute('term') || this.textContent, c) : undefined
+      const view = CONFIG.renderVisual({ spec: c.visual.spec, data, concept: c, term: this.getAttribute('term') || this.textContent })
+      if (view instanceof Node) holder.appendChild(view)
+      else if (typeof view === 'string') holder.innerHTML = view
+      pop.appendChild(holder)
+    }
+
+    // The relations pass, distinct from depth.
+    if (hasRelations(c)) {
+      const rels = make('span', 'lucid-pop__rels')
+      for (const kind of ['broader', 'narrower', 'related']) {
+        for (const id of (c.relations[kind] || [])) {
+          const chip = make(CONFIG.onSelect ? 'button' : 'span', 'lucid-pop__rel')
+          if (CONFIG.onSelect) {
+            chip.type = 'button'
+            chip.addEventListener('click', (e) => { e.stopPropagation(); CONFIG.onSelect(id) })
+          }
+          chip.appendChild(make('span', 'lucid-pop__rel-kind', kind))
+          chip.appendChild(document.createTextNode(' ' + humanizeId(id)))
+          rels.appendChild(chip)
+        }
+      }
+      pop.appendChild(rels)
+    }
+
+    const hasEvidence = (c.sources && c.sources.length)
+    if (hasEvidence) {
+      const more = make('button', 'lucid-pop__more', 'Open the source')
+      more.type = 'button'
+      more.addEventListener('click', (e) => {
+        e.stopPropagation()
+        this.showEvidence(pop, more)
+      })
+      pop.appendChild(more)
+    }
+
+    this.appendChild(pop)
+    this._pop = pop
+
+    // Place it inside the viewport, then move focus in.
+    pop.tabIndex = -1
+    this._place()
+    pop.focus()
+
+    this._onPlace = () => this._place()
+    window.addEventListener('resize', this._onPlace)
+    window.addEventListener('scroll', this._onPlace, true)
+
+    this._onDoc = (e) => {
+      if (!this.contains(e.target)) this.close()
+    }
+    this._onKey = (e) => {
+      if (e.key === 'Escape') this.close()
+    }
+    setTimeout(() => {
+      document.addEventListener('mousedown', this._onDoc)
+      document.addEventListener('keydown', this._onKey)
+    }, 0)
+  }
+
+  // Place the panel so it never runs off the page or grows taller than the screen:
+  // clamp it horizontally into the viewport, open it on whichever side of the mark
+  // has more room, and cap its height to that room with internal scroll.
+  _place() {
+    const pop = this._pop
+    if (!pop) return
+    const gutter = 8
+    const vw = window.innerWidth
+    const vh = window.innerHeight
+    const r = this.getBoundingClientRect()
+    const width = Math.min(320, vw - gutter * 2)
+    let leftVp = r.left
+    if (leftVp + width > vw - gutter) leftVp = vw - gutter - width
+    if (leftVp < gutter) leftVp = gutter
+    const spaceBelow = vh - r.bottom - gutter
+    const spaceAbove = r.top - gutter
+    const below = spaceBelow >= spaceAbove
+    const maxHeight = Math.max(120, Math.round((below ? spaceBelow : spaceAbove) - 6))
+    pop.classList.toggle('lucid-pop--above', !below)
+    pop.style.left = Math.round(leftVp - r.left) + 'px'
+    pop.style.width = Math.round(width) + 'px'
+    pop.style.maxWidth = 'none'
+    pop.style.maxHeight = maxHeight + 'px'
+  }
+
+  showEvidence(pop, moreBtn) {
+    if (this._evidenceShown) return
+    this._evidenceShown = true
+    if (moreBtn) moreBtn.remove()
+
+    const c = this._concept
+    const wrap = make('span', 'lucid-pop__evidence')
+
+    if (c.sources && c.sources.length) {
+      const group = make('span', 'lucid-pop__group')
+      group.appendChild(make('span', 'lucid-pop__label lucid-pop__label--support', 'What supports it'))
+      for (const s of c.sources) {
+        const item = make('span', 'lucid-pop__item')
+        if (s.href) {
+          const a = make('a', null, s.label)
+          a.href = s.href
+          a.target = '_blank'
+          a.rel = 'noreferrer'
+          item.appendChild(a)
+        } else {
+          item.appendChild(document.createTextNode(s.label))
+        }
+        if (s.note) item.appendChild(make('span', 'lucid-pop__note', `: ${s.note}`))
+        group.appendChild(item)
+      }
+      wrap.appendChild(group)
+    }
+
+    wrap.appendChild(
+      make('span', 'lucid-pop__sovereign', 'The judgment is yours. This shows its reasons, it does not render a verdict.'),
+    )
+    pop.appendChild(wrap)
+    // The panel just grew, so recompute its height cap and placement.
+    this._place()
+  }
+
+  close() {
+    if (!this._open) return
+    this._open = false
+    this._evidenceShown = false
+    this.setAttribute('aria-expanded', 'false')
+    // Return focus to the mark only if focus was inside the panel (Escape, or
+    // interacting within it), not when the reader clicked elsewhere.
+    const returnFocus = this.contains(document.activeElement)
+    if (this._pop) {
+      this._pop.remove()
+      this._pop = null
+    }
+    document.removeEventListener('mousedown', this._onDoc)
+    document.removeEventListener('keydown', this._onKey)
+    if (this._onPlace) {
+      window.removeEventListener('resize', this._onPlace)
+      window.removeEventListener('scroll', this._onPlace, true)
+      this._onPlace = null
+    }
+    if (returnFocus) {
+      try {
+        this.focus()
+      } catch (e) {
+        /* mark may be gone */
+      }
+    }
+  }
+
+  disconnectedCallback() {
+    pending.delete(this)
+    this.close()
+  }
+}
+
+if (typeof window !== 'undefined' && window.customElements && !customElements.get('lucid-term')) {
+  loadDeclaredRegistry()
+  customElements.define('lucid-term', LucidTerm)
+}
+
+
+    configure({
+      getData(term){
+        if (term === 'demand signal') return [{label:'committed',value:8},{label:'warm',value:3},{label:'cold',value:21}];
+        return [];
+      },
+      onSelect(id){ const el = document.querySelector('[data-jump="'+id+'"]'); if (el) el.scrollIntoView({behavior:'smooth',block:'center'}); },
+      renderVisual({spec,data}){
+        const xF=(spec.encoding&&spec.encoding.x&&spec.encoding.x.field)||'label';
+        const yF=(spec.encoding&&spec.encoding.y&&spec.encoding.y.field)||'value';
+        const ns='http://www.w3.org/2000/svg', W=240,H=96,pad=6,base=H-18;
+        const max=Math.max(...data.map(d=>d[yF]),1), slot=(W-pad*2)/(data.length||1), bw=slot*0.6;
+        const svg=document.createElementNS(ns,'svg'); svg.setAttribute('viewBox','0 0 '+W+' '+H); svg.setAttribute('width','100%');
+        data.forEach((d,i)=>{ const bh=(d[yF]/max)*(base-8), x=pad+i*slot+(slot-bw)/2;
+          const r=document.createElementNS(ns,'rect'); r.setAttribute('x',x); r.setAttribute('y',base-bh);
+          r.setAttribute('width',bw); r.setAttribute('height',bh); r.setAttribute('rx','2'); r.setAttribute('fill','var(--color-accent,#2f6f7e)'); svg.appendChild(r);
+          const t=document.createElementNS(ns,'text'); t.setAttribute('x',x+bw/2); t.setAttribute('y',H-5);
+          t.setAttribute('text-anchor','middle'); t.setAttribute('font-size','8'); t.setAttribute('fill','var(--color-text-secondary,#565d66)');
+          t.textContent=d[xF]; svg.appendChild(t); });
+        return svg;
+      }
+    });
+    registerConcepts({
+      'operating shape': {
+        gloss: 'How your venture actually works: the structural profile that sets what counts as evidence for it.',
+        explainer: 'Name your shape before the roadmap, because it sets the whole evidentiary regime: making a market, entering one, reshaping one, or porting a proven one.',
+        detail: 'The master axis is the market type. It reads wrong in two directions, calling a new market an existing one, or calling an existing market a make-a-market bet to excuse absent demand.',
+        domain: 'A reading you reconfirm as the venture matures, not a setting you fix once.',
+        sources: [{ label: 'Blank, the four market types', note: 'the master axis that sets what you inherit' }],
+        relations: { narrower: ['demand signal'], related: ['runway'] }
+      },
+      'demand signal': {
+        gloss: "The market's own verdict on whether people want the thing: real use, retention, and conversion.",
+        explainer: 'Weight what people did over what they said. For a two-sided venture, read it per side, never as a total.',
+        sources: [{ label: 'Ries, validated learning', note: 'behavior over stated intent' }],
+        relations: { broader: ['operating shape'] },
+        visual: { spec: { mark:'bar', encoding:{ x:{field:'label'}, y:{field:'value'} }, data:{name:'lucid:instance'} },
+                  dataContract: { requiredFields: [{field:'label'},{field:'value'}] } }
+      },
+      'runway': { gloss: 'How long your cash lasts at your current burn before you need more.' }
+    });
+
+</script>
+</body>
+</html>

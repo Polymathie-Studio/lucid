@@ -1,0 +1,69 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://github.com/Polymathie-xyz/lucid/schema.json",
+  "title": "LUCID concept dictionary",
+  "description": "The data contract a site fills in. A dictionary maps a term, lowercased, to a concept met at up to three depths. A site defines each concept once here and every marked term reads the same entry, so a term means the same thing wherever it appears.",
+  "type": "object",
+  "additionalProperties": { "$ref": "#/definitions/concept" },
+  "definitions": {
+    "concept": {
+      "type": "object",
+      "required": ["gloss"],
+      "additionalProperties": false,
+      "properties": {
+        "gloss": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Depth one, for the reader who only needs to follow. One plain line that names what kind of thing this is. Always present."
+        },
+        "explainer": {
+          "type": "string",
+          "description": "Depth two, for the reader who needs to use it. What to do with it and how it bears on the work."
+        },
+        "detail": {
+          "type": "string",
+          "description": "Depth three text, the fuller detail for the reader who has kept going."
+        },
+        "domain": {
+          "type": "string",
+          "description": "An optional plain-language frame surfaced at the gloss depth, for a term that would be misread without knowing what kind of claim it is."
+        },
+        "sources": {
+          "type": "array",
+          "description": "The deepest rung. The reachable path from the compressed claim back to its basis, so the reader can check the compression is faithful. The rung shows the basis and leaves the verdict with the reader.",
+          "items": { "$ref": "#/definitions/source" }
+        },
+        "relations": {
+          "type": "object",
+          "description": "Ties to other concepts, a separate axis from disclosure depth. Values are concept ids or terms.",
+          "additionalProperties": false,
+          "properties": {
+            "broader": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+            "narrower": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+            "related": { "type": "array", "items": { "type": "string", "minLength": 1 } }
+          }
+        },
+        "visual": {
+          "type": "object",
+          "description": "An optional declarative visual binding. The spec is data-deferred and rendered by a host-supplied renderer, so the dictionary stays free of instance data and the module needs no visualization runtime.",
+          "required": ["spec"],
+          "additionalProperties": false,
+          "properties": {
+            "spec": { "type": "object", "description": "A declarative, Vega-Lite-shaped spec whose data source is named, not inline." },
+            "dataContract": { "type": "object", "description": "The instance-data contract the spec implies: the fields the host must supply." }
+          }
+        }
+      }
+    },
+    "source": {
+      "type": "object",
+      "required": ["label"],
+      "additionalProperties": false,
+      "properties": {
+        "label": { "type": "string", "minLength": 1, "description": "What the source is." },
+        "href": { "type": "string", "description": "An optional link to it." },
+        "note": { "type": "string", "description": "An optional one-line gloss of why it supports the claim." }
+      }
+    }
+  }
+}

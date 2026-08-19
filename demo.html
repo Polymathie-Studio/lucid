@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>LUCID demo</title>
+  <link rel="stylesheet" href="./lucid.css">
+  <style>
+    /* A minimal token set so the demo looks intentional. In a real site these
+       come from TEMPER; lucid.css falls back cleanly if they are absent. */
+    :root {
+      --color-bg-base: #fbfbfa; --color-bg-elevated: #ffffff;
+      --color-border: #e4e4e7; --color-text-primary: #1f2430;
+      --color-text-secondary: #6b7280; --color-accent: #4f46e5;
+      --color-positive: #047857; --color-caution: #b91c1c;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --color-bg-base: #14161c; --color-bg-elevated: #1c1f27;
+        --color-border: #2a2e39; --color-text-primary: #e8e9ee;
+        --color-text-secondary: #9aa1af; --color-accent: #8b8cf7;
+        --color-positive: #34d399; --color-caution: #f87171;
+      }
+    }
+    body {
+      max-width: 42rem; margin: 3rem auto; padding: 0 1.25rem;
+      background: var(--color-bg-base); color: var(--color-text-primary);
+      font: 16px/1.65 ui-sans-serif, system-ui, -apple-system, sans-serif;
+    }
+    h1 { font-size: 1.5rem; margin-bottom: 0.25rem; }
+    .sub { color: var(--color-text-secondary); margin-top: 0; }
+    p { margin: 1.1rem 0; }
+  </style>
+</head>
+<body>
+  <h1>LUCID</h1>
+  <p class="sub">Layered Understanding, Calibrated In Disclosure.</p>
+
+  <p>Hover a marked term for the gloss, click to open the explainer, then open the source to reach the basis the claim rests on. The judgment stays yours.</p>
+
+  <p>The first thing a founder names is their <lucid-term>operating shape</lucid-term>, because it decides what counts as evidence. A make-a-market venture reads <lucid-term term="demand signal">demand</lucid-term> the opposite way an incumbent does.</p>
+
+  <p>A term with no deeper layers, like <lucid-term>runway</lucid-term>, still glosses on hover but does not open. A term with no entry at all just reads as plain text.</p>
+
+  <script type="module">
+    import { registerConcepts, configure } from './lucid.js'
+
+    // The host supplies the visualization runtime and the instance data, so the
+    // module stays zero-dependency. This is a tiny reference renderer for the bar
+    // mark; in production you would hand the spec to Vega-Lite instead.
+    configure({
+      getData(term) {
+        if (term === 'demand signal') {
+          return [{ label: 'committed', value: 8 }, { label: 'warm', value: 3 }, { label: 'cold', value: 21 }]
+        }
+        return []
+      },
+      renderVisual({ spec, data }) {
+        const xF = (spec.encoding && spec.encoding.x && spec.encoding.x.field) || 'label'
+        const yF = (spec.encoding && spec.encoding.y && spec.encoding.y.field) || 'value'
+        const ns = 'http://www.w3.org/2000/svg'
+        const W = 240, H = 96, pad = 6, base = H - 18
+        const max = Math.max(...data.map((d) => d[yF]), 1)
+        const slot = (W - pad * 2) / (data.length || 1), bw = slot * 0.6
+        const svg = document.createElementNS(ns, 'svg')
+        svg.setAttribute('viewBox', `0 0 ${W} ${H}`)
+        svg.setAttribute('width', '100%')
+        data.forEach((d, i) => {
+          const bh = (d[yF] / max) * (base - 8)
+          const x = pad + i * slot + (slot - bw) / 2
+          const rect = document.createElementNS(ns, 'rect')
+          rect.setAttribute('x', x); rect.setAttribute('y', base - bh)
+          rect.setAttribute('width', bw); rect.setAttribute('height', bh)
+          rect.setAttribute('rx', '2'); rect.setAttribute('fill', 'var(--color-accent, #6366f1)')
+          svg.appendChild(rect)
+          const t = document.createElementNS(ns, 'text')
+          t.setAttribute('x', x + bw / 2); t.setAttribute('y', H - 5)
+          t.setAttribute('text-anchor', 'middle'); t.setAttribute('font-size', '8')
+          t.setAttribute('fill', 'var(--color-text-secondary, #6b7280)')
+          t.textContent = d[xF]
+          svg.appendChild(t)
+        })
+        return svg
+      },
+    })
+
+    registerConcepts({
+      'operating shape': {
+        gloss: 'How your venture actually works: the structural profile that sets what counts as evidence and what would count as being wrong for you.',
+        explainer: 'Name your shape before the roadmap, because it sets the whole evidentiary regime. Are you making a market, entering one, reshaping one, or porting a proven one; where does the primary risk sit; who pays; and how does someone commit.',
+        detail: 'The master axis is the market type: making, entering, reshaping, or porting. It reads wrong in two directions, calling a new market an existing one, or calling an existing market a make-a-market bet to excuse absent demand.',
+        domain: 'Hold this as a reading you reconfirm as the venture matures, not a setting you fix once.',
+        sources: [
+          { label: 'Blank, market types: existing, resegmented, new, clone', note: 'the master axis that sets how much you inherit' }
+        ],
+        relations: { narrower: ['demand signal'], related: ['runway'] }
+      },
+      'demand signal': {
+        gloss: "The market's own verdict on whether people want the thing: real use, retention, and conversion. Not views, followers, or signups.",
+        explainer: 'Weight what people did over what they said. For a two-sided venture, read it per side and per segment, never as a total.',
+        sources: [
+          { label: 'Ries, validated learning', note: 'behavior over stated intent' }
+        ],
+        relations: { broader: ['operating shape'] },
+        visual: {
+          spec: { mark: 'bar', encoding: { x: { field: 'label' }, y: { field: 'value' } }, data: { name: 'lucid:instance' } },
+          dataContract: { requiredFields: [{ field: 'label' }, { field: 'value' }] }
+        }
+      },
+      'runway': {
+        gloss: 'How long your cash lasts at your current burn before you need more.'
+      }
+    })
+  </script>
+</body>
+</html>
