@@ -1,6 +1,11 @@
 # LUCID
 
 <picture>
+  <source media="(prefers-color-scheme: dark)" srcset="assets/lucid-overview-dark.svg">
+  <img alt="LUCID overview: why it exists (a reader is not a type to sort, and a compressed claim with no route to its basis asks to be taken on trust), the three depths (gloss to follow, explainer to use, detail with a path to source to check), that it assembles known mechanisms into one graduated ascent, and how it differs from tooltips, footnotes, doc tabs, and a plain collapse." src="assets/lucid-overview-light.svg" width="1200">
+</picture>
+
+<picture>
   <source media="(prefers-color-scheme: dark)" srcset="assets/lucid-render-dark.png">
   <img alt="LUCID rendering in a page: a marked term, operating shape, opened to its panel showing the gloss, the fuller detail, related concepts, and a path to the source." src="assets/lucid-render-light.png" width="900">
 </picture>
@@ -99,7 +104,7 @@ LUCID is one instrument in **DS4AI, the Design Suite for AI, from [Polymathie-St
 - **[TEMPER](https://github.com/Polymathie-Studio/temper)**: perceivable, color and design tokens
 - **[GRASP](https://github.com/Polymathie-Studio/grasp)**: operable, interaction components
 - **[LUCID](https://github.com/Polymathie-Studio/lucid)** + **[GRACE](https://github.com/Polymathie-Studio/grace)**: honest off the happy path, disclosure and state components
-- **[HASP](https://github.com/Polymathie-Studio/hasp)**: key privacy, bring-your-own-key
+- **[HASP](https://github.com/Polymathie-Studio/hasp)**: hardened, client-surface security posture
 - **[BEACON](https://github.com/Polymathie-Studio/beacon)**: findable, head metadata and site files
 - **[FLEET](https://github.com/Polymathie-Studio/fleet)**: fast and stable, delivery
 

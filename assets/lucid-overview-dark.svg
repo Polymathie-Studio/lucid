@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="640" viewBox="0 0 1200 640" font-family="system-ui, -apple-system, sans-serif">
+<rect width="1200" height="640" fill="#14161A"/>
+<text x="60" y="78" font-size="44" font-weight="700" fill="#EFF1F4">LUCID</text>
+<text x="210" y="78" font-size="20"  fill="#B8BABD">Layered Understanding, Calibrated In Disclosure</text>
+<text x="60" y="112" font-size="18" font-style="italic" fill="#76A9EE">A claim you can see to the bottom of.</text>
+<rect x="60" y="145" width="330" height="300" rx="10" fill="#25282C" stroke="#313438"/>
+<text x="84" y="185" font-size="16" font-weight="700" fill="#B8BABD">Why It Exists</text>
+<text x="84" y="218" font-size="17" font-weight="600" fill="#EFF1F4">A reader is not a type</text>
+<text x="84" y="240" font-size="15"  fill="#B8BABD">to sort. One reader walks</text>
+<text x="84" y="260" font-size="15"  fill="#B8BABD">from following to checking.</text>
+<text x="84" y="296" font-size="17" font-weight="600" fill="#EFF1F4">Sorted audiences</text>
+<text x="84" y="318" font-size="15"  fill="#B8BABD">hide the path; a reader</text>
+<text x="84" y="338" font-size="15"  fill="#B8BABD">cannot cross between them.</text>
+<text x="84" y="374" font-size="17" font-weight="600" fill="#EFF1F4">A compressed claim</text>
+<text x="84" y="396" font-size="15"  fill="#B8BABD">with no route to its basis</text>
+<text x="84" y="416" font-size="15"  fill="#B8BABD">asks to be taken on trust.</text>
+<rect x="420" y="145" width="400" height="300" rx="10" fill="#25282C" stroke="#313438"/>
+<text x="444" y="185" font-size="16" font-weight="700" fill="#B8BABD">The Three Depths</text>
+<text x="444" y="220" font-size="16" font-weight="600" fill="#EFF1F4">Gloss</text>
+<text x="444" y="240" font-size="15"  fill="#B8BABD">a one-line read, for following</text>
+<text x="444" y="272" font-size="16" font-weight="600" fill="#EFF1F4">Explainer</text>
+<text x="444" y="292" font-size="15"  fill="#B8BABD">focused detail, for using</text>
+<text x="444" y="324" font-size="16" font-weight="600" fill="#EFF1F4">Detail, with a path to source</text>
+<text x="444" y="344" font-size="15"  fill="#B8BABD">the basis, for checking</text>
+<text x="444" y="378" font-size="15"  fill="#B8BABD">Mark a term once, read it everywhere.</text>
+<text x="444" y="398" font-size="15"  fill="#B8BABD">The deepest rung reaches back to the</text>
+<text x="444" y="418" font-size="15"  fill="#B8BABD">basis; the verdict stays with the reader.</text>
+<rect x="850" y="145" width="290" height="300" rx="10" fill="#25282C" stroke="#313438"/>
+<text x="874" y="185" font-size="16" font-weight="700" fill="#B8BABD">Not New, Assembled</text>
+<text x="874" y="236" font-size="40" font-weight="700" fill="#74AE80">One line</text>
+<text x="874" y="264" font-size="15"  fill="#B8BABD">the ascent walked in order,</text>
+<text x="874" y="284" font-size="15"  fill="#B8BABD">no depth a rank.</text>
+<text x="874" y="324" font-size="17" font-weight="600" fill="#EFF1F4">Named plainly</text>
+<text x="874" y="346" font-size="15"  fill="#B8BABD">Tesler, Nielsen, Shneiderman,</text>
+<text x="874" y="366" font-size="15"  fill="#B8BABD">Diataxis, single-source.</text>
+<text x="874" y="400" font-size="17" font-weight="600" fill="#EFF1F4">What it adds</text>
+<text x="874" y="422" font-size="15"  fill="#B8BABD">one graduated ascent to a</text>
+<text x="874" y="442" font-size="15"  fill="#B8BABD">reachable, faithful basis.</text>
+<rect x="60" y="480" width="1080" height="110" rx="10" fill="#25282C" stroke="#313438"/>
+<text x="84" y="516" font-size="16" font-weight="700" fill="#B8BABD">Against the Field</text>
+<text x="84" y="544" font-size="16" font-weight="600" fill="#76A9EE">vs tooltips</text>
+<text x="84" y="564" font-size="14"  fill="#B8BABD">three depths,</text>
+<text x="84" y="581" font-size="14"  fill="#B8BABD">not one flat layer</text>
+<text x="349" y="544" font-size="16" font-weight="600" fill="#76A9EE">vs footnotes</text>
+<text x="349" y="564" font-size="14"  fill="#B8BABD">in place,</text>
+<text x="349" y="581" font-size="14"  fill="#B8BABD">not off to the side</text>
+<text x="614" y="544" font-size="16" font-weight="600" fill="#76A9EE">vs doc tabs</text>
+<text x="614" y="564" font-size="14"  fill="#B8BABD">one reader's path,</text>
+<text x="614" y="581" font-size="14"  fill="#B8BABD">not sorted types</text>
+<text x="879" y="544" font-size="16" font-weight="600" fill="#76A9EE">vs a collapse</text>
+<text x="879" y="564" font-size="14"  fill="#B8BABD">a graded ladder,</text>
+<text x="879" y="581" font-size="14"  fill="#B8BABD">not just hide and show</text>
+<text x="1140" y="622" font-size="13" fill="#B8BABD" text-anchor="end">Apache-2.0 &#183; part of DS4AI, the Design Suite for AI</text>
+</svg>
